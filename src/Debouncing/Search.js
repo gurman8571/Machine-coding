@@ -4,6 +4,7 @@ export default function Search() {
 
 const [search, setsearch] = useState("");
 const [suggestions, setsuggestions] = useState([]);
+const [showsuggestions, setshowsuggestions] = useState(false)
 
 useEffect(() => {
     //FetchSuggestions()
@@ -31,26 +32,30 @@ const FetchSuggestions=async()=>{
           <div className="relative">
             <input 
             onChange={(e)=>{setsearch(e.target.value)}}
+            onBlur={()=>{setshowsuggestions(false)}}
+            onFocus={()=>{setshowsuggestions(true)}}
             type="text" className="p-2 pl-8 rounded border border-gray-200 bg-gray-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:border-transparent" placeholder="search..." defaultValue="Gar" />
             <svg className="w-4 h-4 absolute left-2.5 top-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
           <h3 className="mt-2 text-sm">Gevonden:</h3>
+        {showsuggestions?
           <ul className="bg-white border border-gray-100 w-full mt-2 ">
            
             
-               {suggestions?.map((item,i)=>{
+          {suggestions?.map((item,i)=>{
 return( <li key={i} className="pl-8 pr-2 py-1 border-gray-100 relative cursor-pointer hover:bg-yellow-50 hover:text-gray-900">
 <svg className="stroke-current absolute w-4 h-4 left-2 top-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
 </svg>
 <b>{item}</b>
 </li>
 )
 
-               })}
-          </ul>
+          })}
+     </ul>
+        :<></>}
         </div>
       </div>
           </div>
