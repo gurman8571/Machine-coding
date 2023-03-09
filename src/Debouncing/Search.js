@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from 'react'
-
+import { useDispatch, useSelector } from 'react-redux';
+import{addtocache}from '../utils/SuggestionSlice'
+import Store from'../utils/Store'
 export default function Search() {
 
 const [search, setsearch] = useState("");
 const [suggestions, setsuggestions] = useState([]);
 const [showsuggestions, setshowsuggestions] = useState(false)
+const dispatch=useDispatch();
+const searchcache=useSelector((Store)=>Store.Suggestion)
 
 useEffect(() => {
     //FetchSuggestions()
  //make api call after 200ms
-   const timer=setTimeout(()=>{FetchSuggestions()}, 200);
+
+   const timer=setTimeout(()=>{
+
+if (searchcache[search]) {
+  setsuggestions(searchcache[search])
+} else {
+  FetchSuggestions()  
+}
+
+   }, 200);
 //if the user clicks other key before 200 ms then clear previous timer and start new timer with the new string
   return () => {
     clearTimeout(timer)};
@@ -19,8 +32,11 @@ const FetchSuggestions=async()=>{
     console.log(`api called -${search}`);
     const res=await fetch(`http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=${search}`)
     const data=await res.json();
-    console.log(data[1]);
+    //onsole.log(data[1]);
     setsuggestions(data[1]);
+    dispatch(addtocache({
+      
+      [search]:data[1]}))
     }
     return (
     <div>
